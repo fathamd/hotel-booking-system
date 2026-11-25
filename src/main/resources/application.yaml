@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: hotel-booking-system
+  datasource:
+    url: jdbc:h2:mem:hotel_booking;DB_CLOSE_DELAY=-1;LOCK_TIMEOUT=5000
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        default_batch_fetch_size: 50
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+hotel:
+  inventory:
+    horizon-days: 365
+  booking:
+    hold-duration: 15m
+  payment:
+    gateway: mock
+  property:
+    # Applied to properties onboarded without a time zone; check-in dates and cancellation windows use it.
+    default-time-zone: Asia/Kolkata
+  maintenance:
+    scheduling-enabled: true
+    batch-size: 100
+    # Must exceed the payment gateway timeout so in-flight charges are not reconciled.
+    payment-reconciliation-grace: 2m
+    refund-retry-grace: 2m
+    hold-expiry-interval: 1m
+    payment-reconciliation-interval: 1m
+    refund-retry-interval: 5m
+    inventory-horizon-cron: "0 5 0 * * *"
